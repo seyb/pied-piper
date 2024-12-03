@@ -23,4 +23,6 @@ M. Hendricks (CTO) semble s'en contenter.--
 - [x] Installer Symfony
 - [x] Installer PHPUNIT
 - [x] Configurer la CI
-- [ ] Configurer un Logger
+- [x] Configurer un Logger
+
+### Initialiser l'environnement
