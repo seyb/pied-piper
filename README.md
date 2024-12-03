@@ -22,5 +22,5 @@ M. Hendricks (CTO) semble s'en contenter.--
 
 - [x] Installer Symfony
 - [x] Installer PHPUNIT
-- [ ] Configurer la CI
+- [x] Configurer la CI
 - [ ] Configurer un Logger
