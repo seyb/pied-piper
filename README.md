@@ -15,6 +15,14 @@ Sept le vendredi.Chaque foodtruck ne peut réserver qu'un emplacement par semain
 M. Hendricks (CTO) semble s'en contenter.--
 ```
 
+## Hypothèse
+
+Dans le cadre du MVP, nous considérons que le système n'est capable de gérer qu'une semaine calendaire.
+En effet l'emploi du temps des foodtruck est peu changeant, il leur est donc plus simple d'avoir un emploi du temps fixe.
+Si toutefois le foodtruck doit changer d'emploi du temps pour la semaine suivante, il est de sa responsabilité de 
+supprimer sa réservation pour en refaire une.
+Si la demande s'en fait sentir, le système pourra évoluer vers une solution plus ergonomique pour les foodtrucks.
+
 
 ## Tâches
 
@@ -25,4 +33,28 @@ M. Hendricks (CTO) semble s'en contenter.--
 - [x] Configurer la CI
 - [x] Configurer un Logger
 
-### Initialiser l'environnement
+### Cas d'acceptation
+
+#### Ajouter une réservation 
+
+- [ ] L'ajout nécessite une date et un nom de foodtruck
+- L'ajout n'est pas passible quand:
+  - [ ] le foodtruck a déja une réservation sur cette semaine
+  - [ ] le quota de réservation pour le jour est dépassé
+  - [ ] la date soumise est un samedi ou un dimanche
+
+#### Supprimer une réservation
+
+- [ ] Supprime la réservation d'un foodtruck donné.
+- [ ] Ne fait rien si le foodtruck n'a pas de réservation
+
+#### Lister les réservations
+
+Plusieurs solutions peuvent être envisagées pour lister en fonction des besoins des employés:
+- [ ] Planning de la semaine
+- [ ] Planning par jour
+- [ ] Planning par foodtruck
+
+Etant donné le nombre d'employés (500) et le faible taux de modifications du planning il serait utile de prévoir du
+cache pour résister au pic de connexion à l'heure du déjeuner.
+- [ ] Cache get requests
