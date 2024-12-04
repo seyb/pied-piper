@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-use App\Domain\AddFoodTruckBooked;
+use App\Domain\BookingAdded;
 use App\Domain\BookingRepository;
 use App\Domain\FoodTruck;
 use App\Domain\FoodTruckBooking;
@@ -26,14 +26,14 @@ class InMemoryBookingRepository implements BookingRepository
 
 class AddFoodTruckBookingTest extends ApplicationTestCase
 {
-    function test_it_succeeds_adding_a_booking()
+    function test_it_succeeds()
     {
         $useCase = new AddFoodTruckBooking(new InMemoryBookingRepository(), $this->initializeLoggerMock());
         $booking = new FoodTruckBooking(new FoodTruck('food truck 1'));
 
         $result = $useCase->book($booking);
 
-        $this->assertEquals(new AddFoodTruckBooked(), $result);
+        $this->assertEquals(new BookingAdded(), $result);
     }
 
 

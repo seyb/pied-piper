@@ -2,7 +2,7 @@
 
 namespace App\Domain;
 
-class AddFoodTruckBooked
+class BookingAdded
 {
     public function __construct()
     {

@@ -2,9 +2,8 @@
 
 namespace App\UseCases;
 
-use App\Domain\AddFoodTruckBooked;
+use App\Domain\BookingAdded;
 use App\Domain\BookingRepository;
-use App\Domain\FoodTruck;
 use App\Domain\FoodTruckBooking;
 use Psr\Log\LoggerInterface;
 
@@ -18,11 +17,11 @@ class AddFoodTruckBooking
         $this->bookingRepository = $bookingRepository;
     }
 
-    public function book(FoodTruckBooking $booking): AddFoodTruckBooked
+    public function book(FoodTruckBooking $booking): BookingAdded
     {
         $this->logger->info('Adding a booking for {foodtruck}' , ['foodtruck', $booking->foodTruck]);
         $this->bookingRepository->save($booking);
-        return new AddFoodTruckBooked();
+        return new BookingAdded();
     }
 
 }
