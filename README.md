@@ -39,7 +39,7 @@ Si la demande s'en fait sentir, le système pourra évoluer vers une solution pl
 
 #### Ajouter une réservation 
 
-- [ ] L'ajout nécessite une date et un nom de foodtruck
+- [x] L'ajout nécessite une date et un nom de foodtruck
 - L'ajout n'est pas possible quand :
   - [ ] le foodtruck a déja une réservation sur cette semaine
   - [ ] le quota de réservation pour le jour est dépassé
