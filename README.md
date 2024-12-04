@@ -47,8 +47,8 @@ Si la demande s'en fait sentir, le système pourra évoluer vers une solution pl
 
 #### Supprimer une réservation
 
-- [ ] Supprime la réservation d'un foodtruck donné.
-- [ ] Ne fait rien si le foodtruck n'a pas de réservation
+- [x] Supprime la réservation d'un foodtruck donné.
+- [x] Ne fait rien si le foodtruck n'a pas de réservation
 
 #### Lister les réservations
 

@@ -6,6 +6,7 @@ use App\Domain\BookingDay;
 use App\Domain\BookingDeleted;
 use App\Domain\FoodTruck;
 use App\Domain\FoodTruckBooking;
+use App\Domain\NoBookingError;
 use App\Infrastructure\InMemoryBookingRepository;
 use App\Tests\ApplicationTestCase;
 use App\UseCases\DeleteFoodTruckBooking;
@@ -21,5 +22,13 @@ class DeleteFoodTruckBookingTest extends ApplicationTestCase
         $useCase = new DeleteFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
 
         $this->assertEquals(new BookingDeleted(), $useCase->call($foodTruck));
+    }
+
+    function test_it_does_not_delete_a_food_truck_booking_when_it_does_not_exist() {
+        $foodTruck = new FoodTruck('food truck');
+        $bookingRepository = new InMemoryBookingRepository();
+
+        $useCase = new DeleteFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
+        $this->assertEquals(new NoBookingError(), $useCase->call($foodTruck));
     }
 }

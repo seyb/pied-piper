@@ -5,6 +5,7 @@ namespace App\UseCases;
 use App\Domain\BookingDeleted;
 use App\Domain\BookingRepository;
 use App\Domain\FoodTruck;
+use App\Domain\NoBookingError;
 use Psr\Log\LoggerInterface;
 
 class DeleteFoodTruckBooking
@@ -15,8 +16,10 @@ class DeleteFoodTruckBooking
         $this->bookingRepository = $bookingRepository;
     }
 
-    public function call(FoodTruck $foodTruck): BookingDeleted
+    public function call(FoodTruck $foodTruck): BookingDeleted|NoBookingError
     {
+        if (!$this->bookingRepository->hasBooked($foodTruck))
+            return new NoBookingError();
         return new BookingDeleted();
     }
 
