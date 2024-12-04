@@ -1,6 +1,6 @@
 <?php
 
-namespace App\App\UseCases;
+namespace App\UseCases;
 
 use App\Domain\AddFoodTruckBooked;
 use App\Domain\FoodTruck;

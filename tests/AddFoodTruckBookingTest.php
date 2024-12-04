@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Tests;
 
-use App\App\UseCases\AddFoodTruckBooking;
 use App\Domain\AddFoodTruckBooked;
 use App\Domain\FoodTruck;
+use App\UseCases\AddFoodTruckBooking;
 
 class AddFoodTruckBookingTest extends ApplicationTestCase
 {
