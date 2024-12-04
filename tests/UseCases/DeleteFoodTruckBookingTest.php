@@ -15,9 +15,10 @@ class DeleteFoodTruckBookingTest extends ApplicationTestCase
 {
     function test_it_deletes_a_food_truck_booking_when_it_exists()
     {
-        $foodTruck = new FoodTruck('food truck');
+        $foodTruckName = 'food truck';
+        $foodTruck = new FoodTruck($foodTruckName);
         $bookingRepository = new InMemoryBookingRepository();
-        $bookingRepository->bookings[] = new FoodTruckBooking($foodTruck, BookingDay::Monday);
+        $bookingRepository->bookings[$foodTruckName] = new FoodTruckBooking($foodTruck, BookingDay::Monday);
 
         $useCase = new DeleteFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
 
