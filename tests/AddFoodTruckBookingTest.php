@@ -20,6 +20,11 @@ class InMemoryBookingRepository implements BookingRepository
     public function save(FoodTruckBooking $booking): bool
     {
         $this->isSaved = true;
+        return false;
+    }
+
+    public function hasBooked(FoodTruck $foodTruck): bool
+    {
         return $this->isSaved;
     }
 }
@@ -41,10 +46,14 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
     {
         $bookingRepository = new InMemoryBookingRepository();
         $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
-        $booking = new FoodTruckBooking(new FoodTruck('food truck 1'));
+        $foodTruck = new FoodTruck('food truck 1');
+        $booking = new FoodTruckBooking($foodTruck);
+
+
+        $this->assertFalse($bookingRepository->hasBooked($foodTruck));
 
         $useCase->book($booking);
 
-        $this->assertTrue($bookingRepository->isSaved);
+        $this->assertTrue($bookingRepository->hasBooked($foodTruck));
     }
 }
