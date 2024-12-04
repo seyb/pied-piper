@@ -32,13 +32,15 @@ Si la demande s'en fait sentir, le système pourra évoluer vers une solution pl
 - [x] Installer PHPUNIT
 - [x] Configurer la CI
 - [x] Configurer un Logger
+- [ ] API authentication
+- [ ] generate the API documentation
 
 ### Cas d'acceptation
 
 #### Ajouter une réservation 
 
 - [ ] L'ajout nécessite une date et un nom de foodtruck
-- L'ajout n'est pas passible quand:
+- L'ajout n'est pas possible quand :
   - [ ] le foodtruck a déja une réservation sur cette semaine
   - [ ] le quota de réservation pour le jour est dépassé
   - [ ] la date soumise est un samedi ou un dimanche
