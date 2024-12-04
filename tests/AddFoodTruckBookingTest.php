@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Domain\BookedTwiceError;
 use App\Domain\BookingAdded;
 use App\Domain\BookingDay;
 use App\Domain\BookingRepository;
@@ -56,5 +57,19 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
         $useCase->book($booking);
 
         $this->assertTrue($bookingRepository->hasBooked($foodTruck));
+    }
+
+    function test_it_fails_if_food_truck_already_booked()
+    {
+        $bookingRepository = new InMemoryBookingRepository();
+        $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
+        $foodTruck = new FoodTruck('food truck 1');
+        $booking1 = new FoodTruckBooking($foodTruck, BookingDay::Monday);
+        $booking2 = new FoodTruckBooking($foodTruck, BookingDay::Tuesday);
+
+        $useCase->book($booking1);
+        $result = $useCase->book($booking2);
+
+        $this->assertEquals(new BookedTwiceError(), $result);
     }
 }

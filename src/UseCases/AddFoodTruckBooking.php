@@ -2,6 +2,7 @@
 
 namespace App\UseCases;
 
+use App\Domain\BookedTwiceError;
 use App\Domain\BookingAdded;
 use App\Domain\BookingRepository;
 use App\Domain\FoodTruckBooking;
@@ -17,9 +18,11 @@ class AddFoodTruckBooking
         $this->bookingRepository = $bookingRepository;
     }
 
-    public function book(FoodTruckBooking $booking): BookingAdded
+    public function book(FoodTruckBooking $booking): BookingAdded|BookedTwiceError
     {
         $this->logger->info('Adding a booking for {foodtruck} on day {day}' , ['foodtruck' => $booking->foodTruck, 'day' => $booking->day]);
+        if ($this->bookingRepository->hasBooked($booking->foodTruck))
+            return new BookedTwiceError();
         $this->bookingRepository->save($booking);
         return new BookingAdded();
     }
