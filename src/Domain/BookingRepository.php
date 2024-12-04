@@ -4,6 +4,6 @@ namespace App\Domain;
 
 interface BookingRepository
 {
-    public function save(FoodTruckBooking $booking): bool;
+    public function save(FoodTruckBooking $booking): void;
     public function hasBooked(FoodTruck $foodTruck): bool;
 }

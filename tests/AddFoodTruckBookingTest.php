@@ -12,22 +12,17 @@ use App\UseCases\AddFoodTruckBooking;
 
 class InMemoryBookingRepository implements BookingRepository
 {
-    public bool $isSaved;
+    /** @var FoodTruckBooking[]  */
+    public array $bookings = [];
 
-    public function __construct()
+    public function save(FoodTruckBooking $booking): void
     {
-        $this->isSaved = false;
-    }
-
-    public function save(FoodTruckBooking $booking): bool
-    {
-        $this->isSaved = true;
-        return false;
+        $this->bookings[$booking->foodTruck->name] = $booking;
     }
 
     public function hasBooked(FoodTruck $foodTruck): bool
     {
-        return $this->isSaved;
+        return isset($this->bookings[$foodTruck->name]);
     }
 }
 
@@ -71,5 +66,20 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
         $result = $useCase->book($booking2);
 
         $this->assertEquals(new BookedTwiceError(), $result);
+    }
+
+    function test_it_succeeds_booking_with_different_food_truck()
+    {
+        $bookingRepository = new InMemoryBookingRepository();
+        $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
+        $foodTruck1 = new FoodTruck('food truck 1');
+        $foodTruck2 = new FoodTruck('food truck 2');
+        $booking1 = new FoodTruckBooking($foodTruck1, BookingDay::Monday);
+        $booking2 = new FoodTruckBooking($foodTruck2, BookingDay::Tuesday);
+
+        $useCase->book($booking1);
+        $result = $useCase->book($booking2);
+
+        $this->assertEquals(new BookingAdded(), $result);
     }
 }
