@@ -9,6 +9,7 @@ use App\Domain\FoodTruckBooking;
 use App\Domain\NoBookingError;
 use App\Infrastructure\InMemoryBookingRepository;
 use App\Tests\ApplicationTestCase;
+use App\UseCases\AddFoodTruckBooking;
 use App\UseCases\DeleteFoodTruckBooking;
 
 class DeleteFoodTruckBookingTest extends ApplicationTestCase
@@ -18,7 +19,8 @@ class DeleteFoodTruckBookingTest extends ApplicationTestCase
         $foodTruckName = 'food truck';
         $foodTruck = new FoodTruck($foodTruckName);
         $bookingRepository = new InMemoryBookingRepository();
-        $bookingRepository->bookings[$foodTruckName] = new FoodTruckBooking($foodTruck, BookingDay::Monday);
+        $booking = new FoodTruckBooking($foodTruck, BookingDay::Monday);
+        (new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock()))->call($booking);
 
         $useCase = new DeleteFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
 
