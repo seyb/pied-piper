@@ -20,7 +20,7 @@ class AddFoodTruckBooking
 
     public function book(FoodTruckBooking $booking): AddFoodTruckBooked
     {
-        $this->logger->info('Adding a booking for {foodtruck} on {date}' , ['foodtruck', $booking->foodTruck, 'date', $booking->date]);
+        $this->logger->info('Adding a booking for {foodtruck}' , ['foodtruck', $booking->foodTruck]);
         $this->bookingRepository->save($booking);
         return new AddFoodTruckBooked();
     }
