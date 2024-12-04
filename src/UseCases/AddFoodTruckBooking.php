@@ -19,7 +19,7 @@ class AddFoodTruckBooking
         $this->bookingRepository = $bookingRepository;
     }
 
-    public function book(FoodTruckBooking $booking): BookingAdded|BookedTwiceError|DayQuotaError
+    public function call(FoodTruckBooking $booking): BookingAdded|BookedTwiceError|DayQuotaError
     {
         $this->logger->info('Adding a booking for {foodtruck} on day {day}' , ['foodtruck' => $booking->foodTruck, 'day' => $booking->day]);
         if ($this->bookingRepository->hasBooked($booking->foodTruck))

@@ -52,10 +52,7 @@ Si la demande s'en fait sentir, le système pourra évoluer vers une solution pl
 
 #### Lister les réservations
 
-Plusieurs solutions peuvent être envisagées pour lister en fonction des besoins des employés:
-- [ ] Planning de la semaine
 - [ ] Planning par jour
-- [ ] Planning par foodtruck
 
 Etant donné le nombre d'employés (500) et le faible taux de modifications du planning il serait utile de prévoir du
 cache pour résister au pic de connexion à l'heure du déjeuner.
