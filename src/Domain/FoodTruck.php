@@ -2,10 +2,11 @@
 
 namespace App\Domain;
 
-class FoodTruck
+readonly class FoodTruck
 {
-
-    public function __construct()
+    public string $name;
+    public function __construct(string $name)
     {
+        $this->name = $name;
     }
 }
