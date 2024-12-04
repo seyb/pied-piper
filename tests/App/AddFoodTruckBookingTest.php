@@ -5,6 +5,7 @@ namespace App;
 use App\App\UseCases\AddFoodTruckBooking;
 use App\Domain\AddFoodTruckBooked;
 use App\Domain\FoodTruck;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -21,7 +22,7 @@ class AddFoodTruckBookingTest extends TestCase
     }
 
 
-    public function initializeLoggerMock(): \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
+    public function initializeLoggerMock(): MockObject|LoggerInterface
     {
         return $this->createMock(LoggerInterface::class);
     }
