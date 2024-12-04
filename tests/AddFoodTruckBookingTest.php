@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Domain\BookingAdded;
+use App\Domain\BookingDay;
 use App\Domain\BookingRepository;
 use App\Domain\FoodTruck;
 use App\Domain\FoodTruckBooking;
@@ -34,7 +35,7 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
     function test_it_succeeds()
     {
         $useCase = new AddFoodTruckBooking(new InMemoryBookingRepository(), $this->initializeLoggerMock());
-        $booking = new FoodTruckBooking(new FoodTruck('food truck 1'));
+        $booking = new FoodTruckBooking(new FoodTruck('food truck 1'), BookingDay::Monday);
 
         $result = $useCase->book($booking);
 
@@ -47,7 +48,7 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
         $bookingRepository = new InMemoryBookingRepository();
         $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
         $foodTruck = new FoodTruck('food truck 1');
-        $booking = new FoodTruckBooking($foodTruck);
+        $booking = new FoodTruckBooking($foodTruck, BookingDay::Monday);
 
 
         $this->assertFalse($bookingRepository->hasBooked($foodTruck));
