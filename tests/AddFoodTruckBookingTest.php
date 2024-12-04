@@ -29,10 +29,8 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
     function test_it_succeeds_adding_a_booking()
     {
         $useCase = new AddFoodTruckBooking(new InMemoryBookingRepository(), $this->initializeLoggerMock());
-        $foodtruck = new FoodTruck();
-        $date = new \DateTime();
-
-        $result = $useCase->book($foodtruck, $date);
+        $booking = new FoodTruckBooking(new FoodTruck(), new \DateTime());
+        $result = $useCase->book($booking);
 
         $this->assertEquals(new AddFoodTruckBooked(), $result);
     }
@@ -42,10 +40,8 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
     {
         $bookingRepository = new InMemoryBookingRepository();
         $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
-        $foodtruck = new FoodTruck();
-        $date = new \DateTime();
-
-        $useCase->book($foodtruck, $date);
+        $booking = new FoodTruckBooking(new FoodTruck(), new \DateTime());
+        $useCase->book($booking);
 
         $this->assertTrue($bookingRepository->isSaved);
     }
