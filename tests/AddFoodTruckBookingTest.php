@@ -13,7 +13,7 @@ use App\UseCases\AddFoodTruckBooking;
 
 class InMemoryBookingRepository implements BookingRepository
 {
-    /** @var FoodTruckBooking[]  */
+    /** @var FoodTruckBooking[] */
     public array $bookings = [];
 
     public function save(FoodTruckBooking $booking): void
@@ -28,10 +28,13 @@ class InMemoryBookingRepository implements BookingRepository
 
     public function hasReachedDayQuota(BookingDay $day): bool
     {
-        if (count($this->bookings) >= 8) {
-            return true;
-        }
-        return false;
+        $dayBookings = array_filter($this->bookings, function (FoodTruckBooking $booking) use ($day) {
+            return ($booking->day === $day);
+        });
+        return match ($day) {
+            BookingDay::Friday => (count($dayBookings) >= 7),
+            default => (count($dayBookings) >= 8),
+        };
     }
 }
 
@@ -95,11 +98,22 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
     /**
      * @dataProvider dayQuotaProvider
      */
-    function test_it_fails_if_day_quota_is_reached (BookingDay $day, int $expectedQuota) {
+    function test_it_fails_if_day_quota_is_reached(BookingDay $day, int $expectedQuota)
+    {
         $bookingRepository = new InMemoryBookingRepository();
         $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
 
-        for ($i = 1; $i <= $expectedQuota; $i++) {
+        $days = [BookingDay::Monday,
+            BookingDay::Tuesday,
+            BookingDay::Wednesday,
+            BookingDay::Thursday,
+            BookingDay::Friday];
+        foreach ($days as $i => $d) {
+            $foodTruck = new FoodTruck('food truck of day ' . $i);
+            $this->assertEquals(new BookingAdded(), $useCase->book(new FoodTruckBooking($foodTruck, $d)));
+        }
+
+        for ($i = 1; $i < $expectedQuota; $i++) {
             $foodTruck = new FoodTruck('food truck ' . $i);
             $result = $useCase->book(new FoodTruckBooking($foodTruck, $day));
             $this->assertEquals(new BookingAdded(), $result);
@@ -117,7 +131,7 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
             'Tuesday quota' => [BookingDay::Tuesday, 8],
             'Wednesday quota' => [BookingDay::Wednesday, 8],
             'Thursday quota' => [BookingDay::Thursday, 8],
-            //'Friday quota' => [BookingDay::Friday, 7],
+            'Friday quota' => [BookingDay::Friday, 7],
         ];
     }
 }
