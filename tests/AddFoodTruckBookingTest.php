@@ -6,6 +6,7 @@ use App\Domain\BookedTwiceError;
 use App\Domain\BookingAdded;
 use App\Domain\BookingDay;
 use App\Domain\BookingRepository;
+use App\Domain\DayQuotaError;
 use App\Domain\FoodTruck;
 use App\Domain\FoodTruckBooking;
 use App\UseCases\AddFoodTruckBooking;
@@ -23,6 +24,14 @@ class InMemoryBookingRepository implements BookingRepository
     public function hasBooked(FoodTruck $foodTruck): bool
     {
         return isset($this->bookings[$foodTruck->name]);
+    }
+
+    public function hasReachedDayQuota(BookingDay $day): bool
+    {
+        if (count($this->bookings) >= 8) {
+            return true;
+        }
+        return false;
     }
 }
 
@@ -81,5 +90,34 @@ class AddFoodTruckBookingTest extends ApplicationTestCase
         $result = $useCase->book($booking2);
 
         $this->assertEquals(new BookingAdded(), $result);
+    }
+
+    /**
+     * @dataProvider dayQuotaProvider
+     */
+    function test_it_fails_if_day_quota_is_reached (BookingDay $day, int $expectedQuota) {
+        $bookingRepository = new InMemoryBookingRepository();
+        $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
+
+        for ($i = 1; $i <= $expectedQuota; $i++) {
+            $foodTruck = new FoodTruck('food truck ' . $i);
+            $result = $useCase->book(new FoodTruckBooking($foodTruck, $day));
+            $this->assertEquals(new BookingAdded(), $result);
+        }
+
+        $foodTruck = new FoodTruck('food truck ' . $expectedQuota + 1);
+        $result = $useCase->book(new FoodTruckBooking($foodTruck, $day));
+        $this->assertEquals(new DayQuotaError(), $result);
+    }
+
+    function dayQuotaProvider(): array
+    {
+        return [
+            'Monday quota' => [BookingDay::Monday, 8],
+            'Tuesday quota' => [BookingDay::Tuesday, 8],
+            'Wednesday quota' => [BookingDay::Wednesday, 8],
+            'Thursday quota' => [BookingDay::Thursday, 8],
+            //'Friday quota' => [BookingDay::Friday, 7],
+        ];
     }
 }
