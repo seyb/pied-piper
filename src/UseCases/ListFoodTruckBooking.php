@@ -23,4 +23,14 @@ class ListFoodTruckBooking
             return $booking->foodTruck;
         }, array_values($foodTruckBookings));
     }
+
+    public function planning(): array {
+        return [
+            BookingDay::Monday->toString() => $this->foodTrucksByDay(BookingDay::Monday),
+            BookingDay::Tuesday->toString() => $this->foodTrucksByDay(BookingDay::Tuesday),
+            BookingDay::Wednesday->toString() => $this->foodTrucksByDay(BookingDay::Wednesday),
+            BookingDay::Thursday->toString() => $this->foodTrucksByDay(BookingDay::Thursday),
+            BookingDay::Friday->toString() => $this->foodTrucksByDay(BookingDay::Friday),
+        ];
+    }
 }

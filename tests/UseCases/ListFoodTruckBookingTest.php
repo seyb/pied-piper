@@ -30,4 +30,30 @@ class ListFoodTruckBookingTest extends ApplicationTestCase
         $mondayFoodTrucks = (new ListFoodTruckBooking($bookingRepository))->foodTrucksByDay(BookingDay::Monday);
         $this->assertEquals($mondayFoodTrucks, [$foodTruck1]);
     }
+
+    function test_it_gives_the_planning()
+    {
+        $foodTruck1 = new FoodTruck('Food truck 1');
+        $foodTruck2 = new FoodTruck('Food truck 2');
+        $foodTruck3 = new FoodTruck('Food truck 3');
+        $mondayBooking = new FoodTruckBooking($foodTruck1, BookingDay::Monday);
+        $tuesdayBooking = new FoodTruckBooking($foodTruck2, BookingDay::Tuesday);
+        $wednesdayBooking = new FoodTruckBooking($foodTruck3, BookingDay::Wednesday);
+
+        $bookingRepository = new InMemoryBookingRepository();
+        $useCase = new AddFoodTruckBooking($bookingRepository, $this->initializeLoggerMock());
+        $useCase->call($mondayBooking);
+        $useCase->call($tuesdayBooking);
+        $useCase->call($wednesdayBooking);
+
+        $mondayFoodTrucks = (new ListFoodTruckBooking($bookingRepository))->planning();
+        $this->assertEquals($mondayFoodTrucks, [
+                BookingDay::Monday->toString() => [$foodTruck1],
+                BookingDay::Tuesday->toString() => [$foodTruck2],
+                BookingDay::Wednesday->toString() => [$foodTruck3],
+                BookingDay::Thursday->toString() => [],
+                BookingDay::Friday->toString() => []
+            ]
+        );
+    }
 }
