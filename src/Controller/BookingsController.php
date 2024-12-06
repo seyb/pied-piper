@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Domain\BookingDay;
 use App\Domain\FoodTruck;
+use App\Domain\FoodTruckBooking;
 use App\UseCases\ListFoodTruckBooking;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,12 +20,23 @@ class BookingsController extends AbstractController
     #[Route('/api/bookings', name: 'app_bookings', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $foodTrucks = $this->listFoodTruckBooking->foodTrucksByDay(BookingDay::Monday);
+        $planning = $this->listFoodTruckBooking->planning();
 
-        $responseCode = count($foodTrucks) > 0 ? Response::HTTP_OK : Response::HTTP_NO_CONTENT;
-        return $this->json(array_map(function (FoodTruck $foodTruck) {
+        $planningResource = array_map(function (array $bookings) {
+            return $this->extractFoodTruckNames($bookings);
+        }, $planning);
+        return $this->json($planningResource, Response::HTTP_OK);
+    }
+
+    /**
+     * @param FoodTruck[] $foodTrucks
+     * @return array|string[]
+     */
+    private function extractFoodTruckNames(array $foodTrucks): array
+    {
+        return array_map(function (FoodTruck $foodTruck) {
             return $foodTruck->name;
-        }, $foodTrucks), $responseCode);
+        }, $foodTrucks);
     }
 }
 
