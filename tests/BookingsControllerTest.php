@@ -58,4 +58,18 @@ class BookingsControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
+
+    public function test_it_add_stores_bookings(): void {
+        $client = static::createClient();
+        $bookingRepository = new InMemoryBookingRepository();
+        $client->getContainer()->set(BookingRepository::class, $bookingRepository);
+
+        $foodtruck = 'food truck';
+        $client->request('POST', '/api/bookings', [
+            'foodTruck' => $foodtruck,
+            'day' => BookingDay::Monday->toString()
+        ]);
+        $this->assertResponseIsSuccessful();
+        $this->assertTrue($bookingRepository->hasBooked(new FoodTruck($foodtruck)));
+    }
 }

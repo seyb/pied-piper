@@ -2,18 +2,28 @@
 
 namespace App\Controller;
 
+use App\ApiResource\BookingPayload;
+use App\Domain\BookedTwiceError;
+use App\Domain\BookingAdded;
 use App\Domain\FoodTruck;
+use App\UseCases\AddFoodTruckBooking;
 use App\UseCases\ListFoodTruckBooking;
+use http\Client\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
 class BookingsController extends AbstractController
 {
     private ListFoodTruckBooking $listFoodTruckBooking;
-    public function __construct(ListFoodTruckBooking $listFoodTruckBooking) {
+    private AddFoodTruckBooking $addFoodTruckBooking;
+
+    public function __construct(ListFoodTruckBooking $listFoodTruckBooking, AddFoodTruckBooking $addFoodTruckBooking)
+    {
         $this->listFoodTruckBooking = $listFoodTruckBooking;
+        $this->addFoodTruckBooking = $addFoodTruckBooking;
     }
 
     #[Route('/api/bookings', name: 'app_bookings', methods: ['GET'])]
@@ -26,10 +36,21 @@ class BookingsController extends AbstractController
     }
 
     #[Route('/api/bookings', name: 'app_bookings_create', methods: ['POST'])]
-    public function create(): JsonResponse
+    public function create(
+        #[MapRequestPayload] BookingPayload $payload
+    ): JsonResponse
     {
-        return $this->json([], Response::HTTP_CREATED);
+        try {
+            $result = $this->addFoodTruckBooking->call($payload->toBooking());
+        } catch (\Throwable $e) {
+            return $this->json(['message' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+        return match (true) {
+            $result instanceof BookingAdded => $this->json(['message' => 'Successfully booked'], Response::HTTP_CREATED),
+            default => throw new \Exception('Unexpected match value'),
+        };
     }
+
     /**
      * @param FoodTruck[] $foodTrucks
      * @return array|string[]
