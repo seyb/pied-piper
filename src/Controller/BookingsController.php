@@ -22,9 +22,7 @@ class BookingsController extends AbstractController
     {
         $planning = $this->listFoodTruckBooking->planning();
 
-        $planningResource = array_map(function (array $bookings) {
-            return $this->extractFoodTruckNames($bookings);
-        }, $planning);
+        $planningResource = $this->mapPlanningResource($planning);
         return $this->json($planningResource, Response::HTTP_OK);
     }
 
@@ -32,11 +30,22 @@ class BookingsController extends AbstractController
      * @param FoodTruck[] $foodTrucks
      * @return array|string[]
      */
-    private function extractFoodTruckNames(array $foodTrucks): array
+    private function mapFoodTruckNameResource(array $foodTrucks): array
     {
         return array_map(function (FoodTruck $foodTruck) {
             return $foodTruck->name;
         }, $foodTrucks);
+    }
+
+    /**
+     * @param array $planning
+     * @return array|array[]|\string[][]
+     */
+    public function mapPlanningResource(array $planning): array
+    {
+        return array_map(function (array $foodTrucks) {
+            return $this->mapFoodTruckNameResource($foodTrucks);
+        }, $planning);
     }
 }
 
