@@ -2,11 +2,23 @@
 
 namespace App\Domain;
 
-enum BookingDay: int
+enum BookingDay: string
 {
-    case Monday = 1;
-    case Tuesday = 2;
-    case Wednesday = 3;
-    case Thursday = 4;
-    case Friday = 5;
+    case Monday = 'Monday';
+    case Tuesday = 'Tuesday';
+    case Wednesday = 'Wednesday';
+    case Thursday = 'Thursday';
+    case Friday = 'Friday';
+
+    public function toString(): string
+    {
+        return match ($this) {
+            self::Monday => 'Monday',
+            self::Tuesday => 'Tuesday',
+            self::Wednesday => 'Wednesday',
+            self::Thursday => 'Thursday',
+            self::Friday => 'Friday',
+        };
+    }
 }
+
