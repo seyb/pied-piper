@@ -24,12 +24,23 @@ class InMemoryBookingRepository implements BookingRepository
 
     public function hasReachedDayQuota(BookingDay $day): bool
     {
-        $dayBookings = array_filter($this->bookings, function (FoodTruckBooking $booking) use ($day) {
-            return ($booking->day === $day);
-        });
+        $dayBookings = $this->getBookingsByDay($day);
         return match ($day) {
             BookingDay::Friday => (count($dayBookings) >= 7),
             default => (count($dayBookings) >= 8),
         };
     }
+
+    /**
+     * @param BookingDay $day
+     * @return FoodTruckBooking[]
+     */
+    public function getBookingsByDay(BookingDay $day): array
+    {
+        return array_filter($this->bookings, function (FoodTruckBooking $booking) use ($day) {
+            return ($booking->day === $day);
+        });
+    }
+
+
 }
