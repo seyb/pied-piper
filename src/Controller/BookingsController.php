@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Domain\BookingDay;
 use App\Domain\FoodTruck;
-use App\Domain\FoodTruckBooking;
 use App\UseCases\ListFoodTruckBooking;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +15,7 @@ class BookingsController extends AbstractController
     public function __construct(ListFoodTruckBooking $listFoodTruckBooking) {
         $this->listFoodTruckBooking = $listFoodTruckBooking;
     }
+
     #[Route('/api/bookings', name: 'app_bookings', methods: ['GET'])]
     public function index(): JsonResponse
     {
@@ -26,6 +25,11 @@ class BookingsController extends AbstractController
         return $this->json($planningResource, Response::HTTP_OK);
     }
 
+    #[Route('/api/bookings', name: 'app_bookings_create', methods: ['POST'])]
+    public function create(): JsonResponse
+    {
+        return $this->json([], Response::HTTP_CREATED);
+    }
     /**
      * @param FoodTruck[] $foodTrucks
      * @return array|string[]

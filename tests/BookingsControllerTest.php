@@ -46,4 +46,16 @@ class BookingsControllerTest extends WebTestCase
             BookingDay::Friday->toString() => [],
         ], json_decode($client->getResponse()->getContent(), true));
     }
+
+    public function test_it_adds_a_booking(): void
+    {
+        $client = static::createClient();
+
+        $client->request('POST', '/api/bookings', [
+            'foodTruck' => 'food truck',
+            'day' => BookingDay::Monday->toString()
+        ]);
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+    }
 }
