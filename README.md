@@ -34,6 +34,8 @@ Si la demande s'en fait sentir, le système pourra évoluer vers une solution pl
 - [x] Configurer un Logger
 - [ ] API authentication
 - [ ] generate the API documentation
+- [ ] Dockeriser
+- [ ] Utiliser Doctrine pour le Repository Booking
 
 ### Cas d'acceptation
 
@@ -43,15 +45,19 @@ Si la demande s'en fait sentir, le système pourra évoluer vers une solution pl
 - L'ajout n'est pas possible quand :
   - [x] le foodtruck a déja une réservation sur cette semaine
   - [x] le quota de réservation pour le jour est dépassé
+- [x] API Endpoint
+  - Note : tous les retours d'erreur ne sont pas implémentés 
 
 #### Supprimer une réservation
 
 - [x] Supprime la réservation d'un foodtruck donné.
 - [x] Ne fait rien si le foodtruck n'a pas de réservation
+- [ ] API Endpoint
 
 #### Lister les réservations
 
 - [x] Liste les foodtrucks présents pour une jour donnée
+- [x] Planning API Endpoint
 
 Etant donné le nombre d'employés (500) et le faible taux de modifications du planning il serait utile de prévoir du
 cache pour résister au pic de connexion à l'heure du déjeuner.
